@@ -3,6 +3,8 @@ A take-home project for practice working with data in Node and Javascript.
 
 Taken from https://homework.adhoc.team/slcsp/
 
+Run 'npm i' and then 'node findRates' to run the code. All code is in findRates.js.
+
 
 # SLCSP
 
