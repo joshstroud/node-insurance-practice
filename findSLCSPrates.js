@@ -29,12 +29,12 @@ function readCSV(filePath) {
 function readAllCSVs() {
     return readCSV(zipsPath)
         .then(csvArr => {
-            inputZips = csvArr;
+            rateAreasLookup = csvArr;
             // console.log(inputZips);
             return readCSV(slcspPath);
         })
         .then(csvArr => {
-            rateAreasLookup = csvArr;
+            inputZips = csvArr;
             // console.log(rateAreasLookup);
             return readCSV(plansPath);
         })
@@ -45,11 +45,37 @@ function readAllCSVs() {
         });
 }
 
+// remember that zip can be in more than one county
+function findRateArea(zip, rateAreasLookupArr) {
+    let matches = rateAreasLookupArr.filter(row => zip === row[0]);
+    // console.log(matches);
+
+    // if multiple rate areas for a given zip, return null
+    if (matches.length > 1) {
+        let uniqueRateAreas = new Set();
+        for (let i = 0; i < matches.length; i++) {
+            let matchRateArea = matches[i][4];
+            uniqueRateAreas.add(matchRateArea);
+        }
+
+        if (uniqueRateAreas.size > 1) {
+            return null;
+        }
+    }
+
+    let rateArea = [];
+    let state = matches[0][1];
+    let rateAreaCode = matches[0][4];
+    rateArea.push([state, rateAreaCode]);
+    return rateArea;
+}
+
 function main() {
     readAllCSVs()
-        .then(
-
-        )
+        .then(() => {
+            // console.log(rateAreasLookup);
+            console.log(findRateArea('65608', rateAreasLookup));
+        })
 }
 
 main();
